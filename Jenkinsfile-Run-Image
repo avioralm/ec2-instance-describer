@@ -1,0 +1,15 @@
+pipeline {
+  agent any
+    stages {
+        stage('Run built image') {
+            steps {
+                cleanWs()
+                script {
+                def buildNumber = Jenkins.instance.getItem('ec2-monitor-builder').lastSuccessfulBuild.number
+                sh "sudo docker rm ec2-monitor"
+                sh "sudo docker run -v /home/ec2-user/.aws:/root/.aws --name ec2-monitor ec2-monitor:${buildNumber} "
+                }
+            }
+        }
+    }
+}
