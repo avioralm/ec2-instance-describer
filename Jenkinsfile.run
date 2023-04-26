@@ -27,6 +27,6 @@ pipeline {
 
 @NonCPS
 def runDockerImage() {
-    def lastBuildNumber = Jenkins.instance.getItemByFullName('python').getLastSuccessfulBuild().number
+    def lastBuildNumber = Jenkins.instance.getItemByFullName('ci').getLastSuccessfulBuild().number
     sh "docker run --env AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID} --env AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY} ec2-instance-describer:${lastBuildNumber}"
 }
