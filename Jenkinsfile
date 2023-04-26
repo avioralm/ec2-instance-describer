@@ -16,9 +16,8 @@ pipeline {
             } catch (err) {
                  echo "Error: ${err}"
                  currentBuild.result = 'FAILURE'
-                 error "Failed to build Docker image"
+                 error "Docker image build failed!"
              }
-
         }
       }
     }
