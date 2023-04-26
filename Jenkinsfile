@@ -4,7 +4,6 @@ pipeline {
   stages {
     stage('Git Clone') {
       steps {
-        cleanWs()
         git branch: 'main', url: 'https://github.com/avioralm/ec2-instance-describer.git'
       }
     }
@@ -12,9 +11,22 @@ pipeline {
     stage('Docker Build') {
       steps {
         script {
-          docker.build("ec2-instance-describer:${env.BUILD_NUMBER}")
+            try {
+              docker.build("ec2-instance-describer:${env.BUILD_NUMBER}")
+            } catch (err) {
+                 echo "Error: ${err}"
+                 currentBuild.result = 'FAILURE'
+                 error "Failed to build Docker image"
+             }
+
         }
       }
     }
   }
+
+  post {
+        always {
+            cleanWs()
+        }
+    }
 }
